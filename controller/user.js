@@ -37,10 +37,12 @@ const getuserById = async (req, res, next) => {
 
 const deleteUser = async (req, res, next) => {
   try {
-    const deleteUser = await User.findByIdAndDelete(req.params.id);
+    const deleteUser = await User.findById(req.params.id);
 
     if (!deleteUser)
       throw createError(404, "The user with given id is not found");
+
+    await deleteUser.remove();
 
     res.status(204).send({ status: "success", payload: {} });
   } catch (error) {
@@ -50,7 +52,10 @@ const deleteUser = async (req, res, next) => {
 
 const updateUser = async (req, res, next) => {
   try {
-    const editUser = await User.findByIdAndUpdate(req.params.id, req.body);
+    const editUser = await User.findOneAndUpdate(
+      { _id: req.params.id },
+      req.body
+    );
     if (!editUser)
       throw createError(404, "The user with given id is not found");
 

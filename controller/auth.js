@@ -14,7 +14,7 @@ const login = async (req, res, next) => {
       user.passwordHash
     );
 
-    if (comparePassword)
+    if (!comparePassword)
       throw createError(401, "Email or Password doesn't match");
 
     const userToken = {

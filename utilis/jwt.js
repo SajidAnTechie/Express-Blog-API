@@ -15,7 +15,7 @@ const verifyToken = (payload, secretKey) => {
   } catch (error) {
     if (error.name === "TokenExpiredError")
       throw createError(401, "Token is Expired");
-    // throw error;
+    throw error;
   }
 };
 

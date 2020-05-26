@@ -7,7 +7,7 @@ const {
   updateUser,
   getuserById,
 } = require("../controller/user");
-const validateUserSchema = require("../middleware/validation");
+const { validateUserSchema } = require("../middleware/validation");
 
 router.get("/", getUsers);
 router.post("/post", validateUserSchema, createUsers);

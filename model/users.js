@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Joi = require("@hapi/joi");
+const { Project } = require("../model/project");
 const bcrypt = require("bcrypt");
 
 const UserSchema = new mongoose.Schema(
@@ -27,6 +28,12 @@ const UserSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    projects: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Project",
+      },
+    ],
   },
   {
     timestamps: true,
@@ -38,6 +45,24 @@ UserSchema.pre("save", async function (next) {
   if (this.isModified("passwordHash")) {
     this.passwordHash = await bcrypt.hash(this.passwordHash, SALT_WORK_FACTOR);
   }
+  next();
+});
+
+UserSchema.pre("findOneAndUpdate", async function (next) {
+  const SALT_WORK_FACTOR = 10;
+
+  const docToUpdate = await this.model.findOne(this.getQuery());
+
+  docToUpdate.passwordHash = await bcrypt.hash(
+    docToUpdate.passwordHash,
+    SALT_WORK_FACTOR
+  );
+
+  next();
+});
+
+UserSchema.pre("remove", async function (next) {
+  await Project.remove({ userId: this._id }).exec();
   next();
 });
 
