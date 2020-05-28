@@ -48,20 +48,7 @@ UserSchema.pre("save", async function (next) {
   next();
 });
 
-UserSchema.pre("findOneAndUpdate", async function (next) {
-  const SALT_WORK_FACTOR = 10;
-
-  const docToUpdate = await this.model.findOne(this.getQuery());
-
-  docToUpdate.passwordHash = await bcrypt.hash(
-    docToUpdate.passwordHash,
-    SALT_WORK_FACTOR
-  );
-
-  next();
-});
-
-UserSchema.pre("remove", async function (next) {
+UserSchema.pre("remove", { document: true }, async function (next) {
   await Project.remove({ userId: this._id }).exec();
   next();
 });
@@ -75,7 +62,6 @@ function validateUser(user) {
     passwordHash: Joi.string().pattern(
       new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})")
     ),
-    isAdmin: Joi.boolean().default(false),
   });
 
   return schema.validate(user);

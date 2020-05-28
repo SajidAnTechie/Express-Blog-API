@@ -20,6 +20,10 @@ const ProjectSchema = new mongoose.Schema(
     verified: {
       type: Boolean,
     },
+    completed: {
+      type: Boolean,
+      default: false,
+    },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

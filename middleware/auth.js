@@ -13,4 +13,5 @@ const auth = (req, res, next) => {
   req.token = decodedToken;
   next();
 };
+
 module.exports = auth;

@@ -39,9 +39,6 @@ const deleteUser = async (req, res, next) => {
   try {
     const deleteUser = await User.findById(req.params.id);
 
-    if (!deleteUser)
-      throw createError(404, "The user with given id is not found");
-
     await deleteUser.remove();
 
     res.status(204).send({ status: "success", payload: {} });
@@ -52,25 +49,31 @@ const deleteUser = async (req, res, next) => {
 
 const updateUser = async (req, res, next) => {
   try {
-    const editUser = await User.findOneAndUpdate(
-      { _id: req.params.id },
-      req.body
-    );
-    if (!editUser)
-      throw createError(404, "The user with given id is not found");
+    const editUser = await User.findByIdAndUpdate(req.params.id, req.body);
 
-    // updateUser.passwordHash = req.body.passwordHash;
-
-    // await updateUser.save();
-
-    // const saveuser = await findUsers.save();
-
-    // const updateuser = await findUsers.update(req.body);
-    // const saveusers = await updateuser.save();
+    await editUser.save();
 
     const updateUser = await User.findById(req.params.id);
 
     res.status(200).send({ status: "success", payload: updateUser });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const makeUserAdmin = async (req, res, next) => {
+  try {
+    const editUser = await User.findById(req.params.id);
+
+    if (!editUser) throw createError(404, "No such user is found");
+
+    editUser.isAdmin = !editUser.isAdmin;
+
+    await editUser.save();
+
+    const getUser = await User.findById(req.params.id);
+
+    res.status(200).send({ status: "success", payload: getUser });
   } catch (error) {
     next(error);
   }
@@ -82,4 +85,5 @@ module.exports = {
   deleteUser,
   updateUser,
   getuserById,
+  makeUserAdmin,
 };
