@@ -14,9 +14,6 @@ const UpdateUserAccessBy = (req, res, next) => {
 };
 
 const deleteUserAccessBy = (req, res, next) => {
-  // false || false == false
-  //  throw error
-
   // if (!req.token.isAdmin || !(req.token.id !== req.params.id))
   //   throw createError(401, "Unauthorize Access or user not found");
 

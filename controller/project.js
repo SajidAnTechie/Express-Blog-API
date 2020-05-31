@@ -24,6 +24,7 @@ const getProjectById = async (req, res, next) => {
         email: 1,
       }
     );
+    if (!getProjectById) throw createError(404, "No such project is found");
 
     res.status(200).send({ status: "success", payload: getProjectById });
   } catch (error) {
@@ -51,7 +52,8 @@ const createProject = async (req, res, next) => {
 
 const deleteProject = async (req, res, next) => {
   try {
-    const ProjectOwner = await Project.findByIdAndDelete(req.params.id);
+    const ProjectOwner = await Project.findById(req.params.id);
+    if (!ProjectOwner) throw createError(404, "No such project is found");
 
     const user = await User.findById(ProjectOwner.userId);
 

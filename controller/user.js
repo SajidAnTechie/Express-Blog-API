@@ -1,5 +1,6 @@
 const { User, validateUser } = require("../model/users");
 const createError = require("../utilis/createError");
+const bcrypt = require("bcrypt");
 
 const getUsers = async (req, res, next) => {
   try {
@@ -39,6 +40,8 @@ const deleteUser = async (req, res, next) => {
   try {
     const deleteUser = await User.findById(req.params.id);
 
+    if (!deleteUser) throw createError(404, "No such user is found");
+
     await deleteUser.remove();
 
     res.status(204).send({ status: "success", payload: {} });
@@ -49,9 +52,22 @@ const deleteUser = async (req, res, next) => {
 
 const updateUser = async (req, res, next) => {
   try {
-    const editUser = await User.findByIdAndUpdate(req.params.id, req.body);
+    const SALT_WORK_FACTOR = 10;
+    const passwordHash = await bcrypt.hash(
+      req.body.passwordHash,
+      SALT_WORK_FACTOR
+    );
 
-    await editUser.save();
+    const edituser = {
+      username: req.body.username,
+      email: req.body.email,
+      passwordHash: passwordHash,
+    };
+
+    const editUser = await User.findOneAndUpdate(
+      { _id: req.params.id },
+      edituser
+    );
 
     const updateUser = await User.findById(req.params.id);
 

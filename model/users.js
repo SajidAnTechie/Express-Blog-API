@@ -48,8 +48,8 @@ UserSchema.pre("save", async function (next) {
   next();
 });
 
-UserSchema.pre("remove", { document: true }, async function (next) {
-  await Project.remove({ userId: this._id }).exec();
+UserSchema.pre("remove", async function (next) {
+  await Project.deleteOne({ userId: this._id }).exec();
   next();
 });
 
@@ -62,6 +62,9 @@ function validateUser(user) {
     passwordHash: Joi.string().pattern(
       new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})")
     ),
+    // for password confirmation
+
+    // password_confirmation: Joi.any().valid(Joi.ref('password')).required().options({ language: { any: { allowOnly: 'must match password' } } })
   });
 
   return schema.validate(user);
