@@ -10,15 +10,6 @@ const app = express();
 
 dotenv.config({ path: "./config/config.env" });
 
-// mongoose
-//   .connect(process.env.MONGO_URL, {
-//     useNewUrlParser: true,
-//     useCreateIndex: true,
-//     useFindAndModify: false,
-//     useUnifiedTopology: true,
-//   })
-//   .then(() => console.log("Mongo database connection is established"));
-
 connectDB();
 
 app.use(express.json());
