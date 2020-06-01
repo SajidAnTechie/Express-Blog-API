@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const { User } = require("../model/users");
 const Joi = require("@hapi/joi");
 
 const ProjectSchema = new mongoose.Schema(

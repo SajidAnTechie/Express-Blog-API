@@ -57,7 +57,7 @@ const deleteProject = async (req, res, next) => {
 
     const user = await User.findById(ProjectOwner.userId);
 
-    const filterUserProject = await user.projects.filter((projectId, index) => {
+    const filterUserProject = await user.projects.filter((projectId) => {
       return !req.params.id.includes(projectId);
     });
 
@@ -73,10 +73,7 @@ const deleteProject = async (req, res, next) => {
 
 const updateProject = async (req, res, next) => {
   try {
-    const editProject = await Project.findByIdAndUpdate(
-      req.params.id,
-      req.body
-    );
+    await Project.findByIdAndUpdate(req.params.id, req.body);
 
     const updateProject = await Project.findById(req.params.id);
 

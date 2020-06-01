@@ -1,4 +1,4 @@
-const unknownEndpoints = (req, res) => {
+const unknownEndpoints = () => {
   const error = new Error("Unknown Endpoints");
   error.status = 404;
   throw error;

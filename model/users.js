@@ -56,19 +56,19 @@ UserSchema.pre("remove", async function (next) {
 function validateUser(user) {
   const schema = Joi.object({
     username: Joi.string().empty().min(3).max(50).required().messages({
-      "string.base": `username should be a type of 'text'`,
-      "string.min": `username should have a minimum length of {3}`,
-      "string.max": `username should have a maximum length of {50}`,
-      "string.empty": `username cannot be an empty feild`,
-      "any.required": `username is a required field`,
+      "string.base": "username should be a type of 'text",
+      "string.min": "username should have a minimum length of {3}",
+      "string.max": "username should have a maximum length of {50}",
+      "string.empty": "username cannot be an empty feild",
+      "any.required": "username is a required field",
     }),
     email: Joi.string()
       .required()
       .empty()
       .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
       .messages({
-        "any.required": `Email is a required field `,
-        "string.empty": `Email cannot be an empty feild`,
+        "any.required": "Email is a required field",
+        "string.empty": "Email cannot be an empty feild",
       }),
     passwordHash: Joi.string()
       .pattern(

@@ -1,4 +1,4 @@
-const { User, validateUser } = require("../model/users");
+const { User } = require("../model/users");
 const createError = require("../utilis/createError");
 const bcrypt = require("bcrypt");
 
@@ -58,16 +58,13 @@ const updateUser = async (req, res, next) => {
       SALT_WORK_FACTOR
     );
 
-    const edituser = {
+    const editUser = {
       username: req.body.username,
       email: req.body.email,
       passwordHash: passwordHash,
     };
 
-    const editUser = await User.findOneAndUpdate(
-      { _id: req.params.id },
-      edituser
-    );
+    await User.findOneAndUpdate({ _id: req.params.id }, editUser);
 
     const updateUser = await User.findById(req.params.id);
 

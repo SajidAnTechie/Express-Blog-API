@@ -1,16 +1,25 @@
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
-const connectDb = require("./config/db");
 const middleware = require("./middleware/middleware");
 const usersRouter = require("./routes/user");
 const loginUser = require("./routes/auth");
 const projectRouter = require("./routes/project");
+const connectDB = require("./config/db");
 const app = express();
 
 dotenv.config({ path: "./config/config.env" });
 
-connectDb();
+// mongoose
+//   .connect(process.env.MONGO_URL, {
+//     useNewUrlParser: true,
+//     useCreateIndex: true,
+//     useFindAndModify: false,
+//     useUnifiedTopology: true,
+//   })
+//   .then(() => console.log("Mongo database connection is established"));
+
+connectDB();
 
 app.use(express.json());
 app.use(cors());
