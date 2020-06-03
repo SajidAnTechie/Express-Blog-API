@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Joi = require("@hapi/joi");
 const { Project } = require("../model/project");
+const sendMail = require("../controller/mail");
 const bcrypt = require("bcrypt");
 
 const UserSchema = new mongoose.Schema(
@@ -45,7 +46,10 @@ UserSchema.pre("save", async function (next) {
   if (this.isModified("passwordHash")) {
     this.passwordHash = await bcrypt.hash(this.passwordHash, SALT_WORK_FACTOR);
   }
-  next();
+
+  const sendMailToUser = await sendMail(this);
+
+  if (sendMailToUser === "success") next();
 });
 
 UserSchema.pre("remove", async function (next) {
