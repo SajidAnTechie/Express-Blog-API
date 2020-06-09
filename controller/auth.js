@@ -30,6 +30,8 @@ const login = async (req, res, next) => {
       username: user.username,
       email: user.email,
       isAdmin: user.isAdmin,
+	  expireIn:"3600"
+	  
     });
   } catch (error) {
     next(error);

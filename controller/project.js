@@ -52,7 +52,7 @@ const createProject = async (req, res, next) => {
 
 const deleteProject = async (req, res, next) => {
   try {
-    const ProjectOwner = await Project.findById(req.params.id);
+    const ProjectOwner = await Project.findByIdAndDelete(req.params.id);
     if (!ProjectOwner) throw createError(404, "No such project is found");
 
     const user = await User.findById(ProjectOwner.userId);
@@ -135,6 +135,22 @@ const rejectProject = async (req, res, next) => {
     next(error);
   }
 };
+
+const authProject = async (req, res, next) => {
+  try {
+    const authProject = await Project.find({ userId: req.token.id }).populate(
+      "userId",
+      {
+        username: 1,
+        email: 1,
+      }
+    );
+
+    res.status(200).send({ status: "success", payload: authProject });
+  } catch (error) {
+    next(error);
+  }
+};
 module.exports = {
   createProject,
   deleteProject,
@@ -144,4 +160,5 @@ module.exports = {
   completeProject,
   approveProject,
   rejectProject,
+  authProject,
 };

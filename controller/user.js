@@ -1,5 +1,6 @@
 const { User } = require("../model/users");
 const createError = require("../utilis/createError");
+const sendMail = require("../controller/mail");
 const bcrypt = require("bcrypt");
 
 const getUsers = async (req, res, next) => {
@@ -18,7 +19,10 @@ const createUsers = async (req, res, next) => {
 
     const newUser = await User.create(req.body);
 
-    res.status(201).send({ status: "success", payload: newUser });
+    const sendMailToUser = await sendMail(this);
+
+    if (sendMailToUser === "success")
+      res.status(201).send({ status: "success", payload: newUser });
   } catch (error) {
     next(error);
   }

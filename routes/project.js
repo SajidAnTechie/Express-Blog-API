@@ -9,6 +9,7 @@ const {
   rejectProject,
   updateProject,
   completeProject,
+  authProject,
 } = require("../controller/project");
 const { validateProjectSchema } = require("../middleware/validation");
 const auth = require("../middleware/auth");
@@ -34,5 +35,6 @@ router.delete("/delete/:id", ProjectAccessBy, deleteProject);
 router.put("/approveProject/:id", approveProject);
 router.put("/rejectProject/:id", rejectProject);
 router.put("/completeProject/:id", completeProjectAccessBy, completeProject);
+router.get("/auth/project", authProject);
 
 module.exports = router;

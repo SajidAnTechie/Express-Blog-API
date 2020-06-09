@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Joi = require("@hapi/joi");
 const { Project } = require("../model/project");
-const sendMail = require("../controller/mail");
+
 const bcrypt = require("bcrypt");
 
 const UserSchema = new mongoose.Schema(
@@ -46,10 +46,6 @@ UserSchema.pre("save", async function (next) {
   if (this.isModified("passwordHash")) {
     this.passwordHash = await bcrypt.hash(this.passwordHash, SALT_WORK_FACTOR);
   }
-
-  const sendMailToUser = await sendMail(this);
-
-  if (sendMailToUser === "success") next();
 });
 
 UserSchema.pre("remove", async function (next) {
@@ -59,13 +55,20 @@ UserSchema.pre("remove", async function (next) {
 
 function validateUser(user) {
   const schema = Joi.object({
-    username: Joi.string().empty().min(3).max(50).required().messages({
-      "string.base": "username should be a type of 'text",
-      "string.min": "username should have a minimum length of {3}",
-      "string.max": "username should have a maximum length of {50}",
-      "string.empty": "username cannot be an empty feild",
-      "any.required": "username is a required field",
-    }),
+    username: Joi.string()
+      .empty()
+      .alphanum()
+      .min(3)
+      .max(50)
+      .required()
+      .messages({
+        "string.base": "username should be a type of 'text",
+        "string.min": "username should have a minimum length of {3}",
+        "string.max": "username should have a maximum length of {50}",
+        "string.empty": "username cannot be an empty feild",
+        "string.alphanum": "username must contain only alphanumeric characters",
+        "any.required": "username is a required field",
+      }),
     email: Joi.string()
       .required()
       .empty()
@@ -86,7 +89,14 @@ function validateUser(user) {
 
     // for password confirmation
 
-    //Joi.ref('passwordHash')
+    confirmPassword: Joi.string()
+      .required()
+      .empty()
+      .valid(Joi.ref("passwordHash"))
+      .messages({
+        "string.valid": "must match",
+        "string.empty": "username cannot be an empty feild",
+      }),
   });
 
   return schema.validate(user);
