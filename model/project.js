@@ -36,18 +36,18 @@ const ProjectSchema = new mongoose.Schema(
 function validateProject(project) {
   const schema = Joi.object({
     title: Joi.string().min(3).max(50).empty().required().messages({
-      "string.base": "username should be a type of 'text",
-      "string.min": "username should have a minimum length of {3}",
-      "string.max": "username should have a maximum length of {50}",
-      "string.empty": "username cannot be an empty feild",
-      "any.required": "username is a required field",
+      "string.base": "title should be a type of 'text",
+      "string.min": "title should have a minimum length of {3}",
+      "string.max": "title should have a maximum length of {50}",
+      "string.empty": "title cannot be an empty feild",
+      "any.required": "title is a required field",
     }),
     description: Joi.string().min(10).empty().max(255).required().messages({
-      "string.base": "username should be a type of 'text",
-      "string.min": "username should have a minimum length of {10}",
-      "string.max": "username should have a maximum length of {255}",
-      "string.empty": "username cannot be an empty feild",
-      "any.required": "username is a required field",
+      "string.base": "description should be a type of 'text",
+      "string.min": "description should have a minimum length of {10}",
+      "string.max": "description should have a maximum length of {255}",
+      "string.empty": "description cannot be an empty feild",
+      "any.required": "description is a required field",
     }),
   });
 
