@@ -1,6 +1,8 @@
 const { Project } = require("../model/project");
 const { User } = require("../model/users");
 const createError = require("../utilis/createError");
+const multer = require("multer");
+const upload = multer({ dest: "uploads" });
 
 const getAllProjects = async (req, res, next) => {
   try {
@@ -34,11 +36,18 @@ const getProjectById = async (req, res, next) => {
 
 const createProject = async (req, res, next) => {
   try {
+    if (req.file === undefined)
+      throw createError(400, "Jpeg or Png file is supported");
+
     const user = await User.findById(req.token.id);
 
     if (!user) throw createError(404, "No such user is found");
 
-    const newProject = await Project.create({ ...req.body, userId: user.id });
+    const newProject = await Project.create({
+      ...req.body,
+      projectImage: req.file.path,
+      userId: user.id,
+    });
 
     user.projects = user.projects.concat(newProject._id);
 
@@ -73,6 +82,8 @@ const deleteProject = async (req, res, next) => {
 
 const updateProject = async (req, res, next) => {
   try {
+    if (req.file === undefined)
+      throw createError(400, "Jpeg or Png file is supported");
     await Project.findByIdAndUpdate(req.params.id, req.body);
 
     const updateProject = await Project.findById(req.params.id);

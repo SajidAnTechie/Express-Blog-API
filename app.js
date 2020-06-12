@@ -6,11 +6,18 @@ const usersRouter = require("./routes/user");
 const loginUser = require("./routes/auth");
 const projectRouter = require("./routes/project");
 const connectDB = require("./config/db");
+const path = require("path");
 const app = express();
 
 dotenv.config({ path: "./config/config.env" });
 
 connectDB();
+
+app.use(express.static(path.join(__dirname, "public")));
+app.use(
+  "/public/uploads",
+  express.static(path.join(__dirname, "./public/uploads"))
+);
 
 app.use(express.json());
 app.use(cors());

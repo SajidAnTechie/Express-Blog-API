@@ -27,6 +27,7 @@ const ProjectSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
+    projectImage: { type: String, required: true },
   },
   {
     timestamps: true,
@@ -49,6 +50,7 @@ function validateProject(project) {
       "string.empty": "description cannot be an empty feild",
       "any.required": "description is a required field",
     }),
+    projectImage: Joi.string(),
   });
 
   return schema.validate(project);

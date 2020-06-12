@@ -11,6 +11,7 @@ const {
   completeProject,
   authProject,
 } = require("../controller/project");
+const ProjectImage = require("../middleware/fileUpload");
 const { validateProjectSchema } = require("../middleware/validation");
 const auth = require("../middleware/auth");
 
@@ -23,10 +24,11 @@ const {
 router.all("*", auth);
 
 router.get("/", getAllProjects);
-router.post("/post", validateProjectSchema, createProject);
+router.post("/post", ProjectImage, validateProjectSchema, createProject);
 router.get("/:id", ProjectAccessBy, getProjectById);
 router.put(
   "/update/:id",
+  ProjectImage,
   validateProjectSchema,
   updateProjectAccessBy,
   updateProject
