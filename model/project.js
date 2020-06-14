@@ -9,12 +9,14 @@ const ProjectSchema = new mongoose.Schema(
       required: [true, "Title is required"],
       minlength: 3,
       maxlength: 50,
+      trim: true,
     },
     description: {
       type: String,
       required: [true, "description is requred"],
       minlength: 10,
       maxlength: 255,
+      trim: true,
     },
     verified: {
       type: Boolean,

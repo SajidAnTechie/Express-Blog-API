@@ -1,6 +1,7 @@
 const multer = require("multer");
 const createError = require("../utilis/createError");
 const path = require("path");
+const { Project } = require("../model/project");
 
 const storage = multer.diskStorage({
   destination: "./public/uploads/",
@@ -28,7 +29,7 @@ const upload = multer({
   fileFilter: fileFilter,
 }).single("projectImage");
 
-const ProjectImage = (req, res, next) => {
+const ProjectImage = async (req, res, next) => {
   upload(req, res, (err) => {
     if (err) throw createError(400, err);
 

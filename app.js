@@ -14,10 +14,6 @@ dotenv.config({ path: "./config/config.env" });
 connectDB();
 
 app.use(express.static(path.join(__dirname, "public")));
-app.use(
-  "/public/uploads",
-  express.static(path.join(__dirname, "./public/uploads"))
-);
 
 app.use(express.json());
 app.use(cors());

@@ -45,7 +45,7 @@ const createProject = async (req, res, next) => {
 
     const newProject = await Project.create({
       ...req.body,
-      projectImage: req.file.path,
+      projectImage: `uploads/${req.file.filename}`,
       userId: user.id,
     });
 
@@ -82,8 +82,12 @@ const deleteProject = async (req, res, next) => {
 
 const updateProject = async (req, res, next) => {
   try {
-    if (req.file === undefined)
-      throw createError(400, "Jpeg or Png file is supported");
+    if (req.file)
+      await Project.findByIdAndUpdate(req.params.id, {
+        ...req.body,
+        projectImage: `uploads/${req.file.filename}`,
+      });
+
     await Project.findByIdAndUpdate(req.params.id, req.body);
 
     const updateProject = await Project.findById(req.params.id);
