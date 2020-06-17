@@ -6,10 +6,12 @@ const upload = multer({ dest: "uploads" });
 
 const getAllProjects = async (req, res, next) => {
   try {
-    const Allprojects = await Project.find().populate("userId", {
-      username: 1,
-      email: 1,
-    });
+    const Allprojects = await Project.find()
+      .sort({ createdAt: -1 })
+      .populate("userId", {
+        username: 1,
+        email: 1,
+      });
 
     res.status(200).send({ status: "success", payload: Allprojects });
   } catch (error) {
@@ -153,13 +155,12 @@ const rejectProject = async (req, res, next) => {
 
 const authProject = async (req, res, next) => {
   try {
-    const authProject = await Project.find({ userId: req.token.id }).populate(
-      "userId",
-      {
+    const authProject = await Project.find({ userId: req.token.id })
+      .sort({ createdAt: -1 })
+      .populate("userId", {
         username: 1,
         email: 1,
-      }
-    );
+      });
 
     res.status(200).send({ status: "success", payload: authProject });
   } catch (error) {

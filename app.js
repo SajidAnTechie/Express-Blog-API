@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
+const colors = require("colors");
 const middleware = require("./middleware/middleware");
 const usersRouter = require("./routes/user");
 const loginUser = require("./routes/auth");
@@ -30,5 +31,6 @@ app.listen(
   PORT,
   console.log(
     `Server is running in ${process.env.NODE_ENV} mode on port ${process.env.PORT}`
+      .yellow.bold
   )
 );
