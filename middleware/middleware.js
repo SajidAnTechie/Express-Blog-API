@@ -6,7 +6,8 @@ const unknownEndpoints = () => {
 
 const errorHandler = (error, req, res, next) => {
   if (error.name === "ValidationError") {
-    return res.status(400).send({ error: error.message });
+    const message = Object.values(error.errors).map((val) => val.message);
+    return res.status(400).send({ status: "Error", error: message });
   }
 
   res
