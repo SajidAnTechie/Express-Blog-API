@@ -1,0 +1,33 @@
+{
+  "name": "mernApi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js",
+    "lint": "eslint ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@hapi/joi": "^17.1.1",
+    "bcrypt": "^4.0.1",
+    "colors": "^1.4.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.9.15",
+    "multer": "^1.4.2",
+    "nodemailer": "^6.4.8"
+  },
+  "devDependencies": {
+    "eslint": "^7.1.0",
+    "eslint-plugin-node": "^11.1.0"
+  },
+  "engines": {
+    "node": ">=10.16.3"
+  }
+}
