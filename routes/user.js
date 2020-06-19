@@ -20,7 +20,7 @@ const {
 } = require("../middleware/user");
 
 router.get("/", getUsers);
-router.post("/post", validateUserSchema, createUsers);
+router.post("/post", createUsers);
 router.delete("/delete/:id", auth, deleteUserAccessBy, deleteUser);
 router.put(
   "/update/:id",
