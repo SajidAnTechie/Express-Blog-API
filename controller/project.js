@@ -13,7 +13,13 @@ const getAllProjects = async (req, res, next) => {
         email: 1,
       });
 
-    res.status(200).send({ status: "success", payload: Allprojects });
+    res
+      .status(200)
+      .send({
+        status: "success",
+        count: Allprojects.length,
+        payload: Allprojects,
+      });
   } catch (error) {
     next(error);
   }
@@ -162,7 +168,13 @@ const authProject = async (req, res, next) => {
         email: 1,
       });
 
-    res.status(200).send({ status: "success", payload: authProject });
+    res
+      .status(200)
+      .send({
+        status: "success",
+        count: authProject.length,
+        payload: authProject,
+      });
   } catch (error) {
     next(error);
   }

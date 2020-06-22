@@ -8,7 +8,9 @@ const getUsers = async (req, res, next) => {
     const users = await User.find().populate("projects", {
       title: 1,
     });
-    res.status(200).send({ status: "success", payload: users });
+    res
+      .status(200)
+      .send({ status: "success", count: users.length, payload: users });
   } catch (error) {
     next(error);
   }
