@@ -50,7 +50,8 @@ UserSchema.pre("save", async function (next) {
 });
 
 UserSchema.pre("remove", async function (next) {
-  await Project.deleteMany({ userId: this._id }).exec();
+  await this.model("Project").deleteMany({ userId: this._id });
+  //await Project.deleteMany({ userId: this._id }).exec();
   next();
 });
 

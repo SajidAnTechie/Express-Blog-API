@@ -13,6 +13,7 @@ const login = async (req, res, next) => {
       req.body.passwordHash,
       user.passwordHash
     );
+    console.log(comparePassword);
 
     if (!comparePassword)
       throw createError(401, "Email or Password doesn't match");
@@ -30,8 +31,7 @@ const login = async (req, res, next) => {
       username: user.username,
       email: user.email,
       isAdmin: user.isAdmin,
-	  expireIn:"3600"
-	  
+      expireIn: "3600",
     });
   } catch (error) {
     next(error);
