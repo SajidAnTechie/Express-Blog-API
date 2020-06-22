@@ -66,15 +66,15 @@ const deleteProject = async (req, res, next) => {
     const ProjectOwner = await Project.findByIdAndDelete(req.params.id);
     if (!ProjectOwner) throw createError(404, "No such project is found");
 
-    const user = await User.findById(ProjectOwner.userId);
+    // const user = await User.findById(ProjectOwner.userId);
 
-    const filterUserProject = user.projects.filter((projectId) => {
-      return !req.params.id.includes(projectId);
-    });
+    // const filterUserProject = user.projects.filter((projectId) => {
+    //   return !req.params.id.includes(projectId);
+    // });
 
-    user.projects = filterUserProject;
+    // user.projects = filterUserProject;
 
-    await user.save();
+    // await user.save();
 
     res.status(204).send({ status: "success", payload: {} });
   } catch (error) {

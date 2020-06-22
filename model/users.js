@@ -46,10 +46,11 @@ UserSchema.pre("save", async function (next) {
   if (this.isModified("passwordHash")) {
     this.passwordHash = await bcrypt.hash(this.passwordHash, SALT_WORK_FACTOR);
   }
+  next();
 });
 
 UserSchema.pre("remove", async function (next) {
-  await Project.deleteOne({ userId: this._id }).exec();
+  await Project.deleteMany({ userId: this._id }).exec();
   next();
 });
 
