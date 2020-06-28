@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Joi = require("@hapi/joi");
+const sendMail = require("../controller/mail");
 const { Project } = require("../model/project");
 
 const bcrypt = require("bcrypt");
@@ -45,6 +46,15 @@ UserSchema.pre("save", async function (next) {
   const SALT_WORK_FACTOR = 10;
   if (this.isModified("passwordHash")) {
     this.passwordHash = await bcrypt.hash(this.passwordHash, SALT_WORK_FACTOR);
+  }
+  next();
+});
+
+UserSchema.pre("save", async function (next) {
+  try {
+    await sendMail(this.username, this.email);
+  } catch (error) {
+    console.log(error);
   }
   next();
 });

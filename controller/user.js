@@ -1,6 +1,5 @@
 const { User } = require("../model/users");
 const createError = require("../utilis/createError");
-const sendMail = require("../controller/mail");
 const bcrypt = require("bcrypt");
 
 const getUsers = async (req, res, next) => {
@@ -19,14 +18,11 @@ const createUsers = async (req, res, next) => {
   try {
     const finduser = await User.findOne({ email: req.body.email });
 
-    if (!finduser) throw createError(409, "Email already exist");
+    if (finduser) throw createError(409, "Email already exist");
 
     const newUser = await User.create(req.body);
 
-    const sendMailToUser = await sendMail(this);
-
-    if (sendMailToUser === "success")
-      res.status(201).send({ status: "success", payload: newUser });
+    res.status(201).send({ status: "success", payload: newUser });
   } catch (error) {
     next(error);
   }
