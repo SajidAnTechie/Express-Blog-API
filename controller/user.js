@@ -1,5 +1,6 @@
 const { User } = require("../model/users");
 const createError = require("../utilis/createError");
+const sendMail = require("./mail");
 const bcrypt = require("bcrypt");
 
 const getUsers = async (req, res, next) => {
