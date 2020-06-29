@@ -22,6 +22,12 @@ const createUsers = async (req, res, next) => {
 
     const newUser = await User.create(req.body);
 
+    try {
+      await sendMail(newUser.username, newUser.email);
+    } catch (error) {
+      console.log(error);
+    }
+
     res.status(201).send({ status: "success", payload: newUser });
   } catch (error) {
     next(error);
@@ -56,23 +62,47 @@ const deleteUser = async (req, res, next) => {
 
 const updateUser = async (req, res, next) => {
   try {
-    const SALT_WORK_FACTOR = 10;
-    const passwordHash = await bcrypt.hash(
-      req.body.passwordHash,
-      SALT_WORK_FACTOR
-    );
-
-    const editUser = {
+    const updateDetails = {
       username: req.body.username,
       email: req.body.email,
-      passwordHash: passwordHash,
     };
 
-    await User.findOneAndUpdate({ _id: req.params.id }, editUser);
+    await User.findByIdAndUpdate(req.params.id, updateDetails, {
+      new: true,
+      runValidators: true,
+    });
 
     const updateUser = await User.findById(req.params.id);
 
     res.status(200).send({ status: "success", payload: updateUser });
+  } catch (error) {
+    next(error);
+  }
+};
+
+//Update Password controllers
+
+const updatePassword = async (req, res, next) => {
+  try {
+    console.log("object");
+    const user = await User.findById(req.token.id);
+
+    //compare current password
+    const isMatch = await bcrypt.compare(
+      req.body.currentPasswordHash,
+      user.passwordHash
+    );
+    if (!isMatch)
+      throw createError(
+        400,
+        `Current Password ${req.body.currentPasswordHash} doen't match`
+      );
+
+    user.passwordHash = req.body.newPasswordHash;
+
+    await user.save();
+
+    res.status(200).send({ status: "success", payload: user });
   } catch (error) {
     next(error);
   }
@@ -103,4 +133,5 @@ module.exports = {
   updateUser,
   getuserById,
   makeUserAdmin,
+  updatePassword,
 };
