@@ -32,4 +32,6 @@ FROM_NAME=your name
 
 ```bash
 npm run dev
+
+http://localhost:3000
 ```
