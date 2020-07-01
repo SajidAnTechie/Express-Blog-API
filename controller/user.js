@@ -1,7 +1,8 @@
 const { User } = require("../model/users");
 const createError = require("../utilis/createError");
-const sendMail = require("./mail");
+const sendMail = require("../utilis/mail");
 const bcrypt = require("bcrypt");
+const user = require("../middleware/user");
 
 const getUsers = async (req, res, next) => {
   try {
@@ -20,16 +21,20 @@ const createUsers = async (req, res, next) => {
     const finduser = await User.findOne({ email: req.body.email });
 
     if (finduser) throw createError(409, "Email already exist");
-
     const newUser = await User.create(req.body);
 
     try {
-      await sendMail(newUser.username, newUser.email);
-    } catch (error) {
-      console.log(error);
-    }
+      const options = {
+        name: newUser.username,
+        email: newUser.email,
+      };
+      await sendMail(options);
 
-    res.status(201).send({ status: "success", payload: newUser });
+      res.status(201).send({ status: "success", payload: newUser });
+    } catch (error) {
+      await newUser.remove();
+      throw createError(500, "Please try again");
+    }
   } catch (error) {
     next(error);
   }
@@ -96,7 +101,7 @@ const updatePassword = async (req, res, next) => {
     if (!isMatch)
       throw createError(
         400,
-        `Current Password ${req.body.currentPasswordHash} doen't match`
+        `Current Password ${req.body.currentPasswordHash} doesn't match`
       );
 
     user.passwordHash = req.body.newPasswordHash;

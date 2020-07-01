@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js",
+    "start": "NODE_ENV=production nodemon app",
+    "dev": "nodemon app",
     "lint": "eslint ."
   },
   "keywords": [],
